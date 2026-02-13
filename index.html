@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ti ❤️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Nunito:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            overflow: hidden; /* Evitar scroll durante animaciones */
+        }
+
+        .title-font {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Animación de latido para el corazón */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            40% { transform: scale(1); }
+            60% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .heart-beat {
+            animation: heartbeat 1.5s infinite;
+        }
+
+        /* Animación para el sobre */
+        .envelope-container {
+            transition: all 0.6s ease;
+        }
+        
+        .hidden-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+
+        .visible-content {
+            display: flex;
+            opacity: 1;
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Partículas de corazones cayendo */
+        .falling-heart {
+            position: fixed;
+            top: -10%;
+            color: #ff4d6d;
+            font-size: 24px;
+            animation: fall linear forwards;
+            z-index: 50;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        /* Gradiente romántico de fondo */
+        .bg-romantic {
+            background: linear-gradient(to bottom right, #ffecd2 0%, #fcb69f 100%);
+        }
+    </style>
+</head>
+<body class="bg-romantic h-screen w-full flex items-center justify-center relative">
+
+    <!-- FASE 1: EL SOBRE / INTRO -->
+    <div id="intro-screen" class="text-center p-6 bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl max-w-md w-full mx-4 border-4 border-pink-200 envelope-container">
+        <div class="text-6xl mb-4 heart-beat">💌</div>
+        <h1 class="text-3xl font-bold text-pink-600 mb-2 title-font">Para Sofi</h1>
+        <p class="text-gray-600 mb-6">Hay algo importante que quiero preguntarte...</p>
+        <button onclick="openLetter()" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition hover:scale-105 active:scale-95">
+            Abrir Mensaje
+        </button>
+    </div>
+
+    <!-- FASE 2: LA PREGUNTA -->
+    <div id="question-screen" class="hidden-content flex-col items-center justify-center text-center p-8 bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl max-w-lg w-full mx-4 border-2 border-red-300 relative z-10">
+        <div class="text-red-500 text-5xl mb-4">🌹</div>
+        <h2 class="text-4xl font-bold text-gray-800 mb-6 title-font">¿Querés ser mi cita de San Valentín?</h2>
+        <p class="text-gray-600 mb-8 text-lg">la vamos a pasar requeterecontra bien!!</p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center w-full relative h-24 sm:h-auto">
+            <button onclick="acceptProposal()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-10 rounded-xl shadow-lg transform transition hover:scale-110 z-20">
+                ¡SÍ, quiero! 😍
+            </button>
+            
+            <!-- El botón NO que se escapa -->
+            <button id="no-btn" onmouseover="moveButton()" onclick="moveButton()" class="bg-gray-400 text-white font-bold py-3 px-10 rounded-xl shadow-lg transition absolute sm:static mt-16 sm:mt-0">
+                No 😢
+            </button>
+        </div>
+    </div>
+
+    <!-- FASE 3: ÉXITO -->
+    <div id="success-screen" class="hidden-content flex-col items-center justify-center text-center p-6 max-w-md w-full z-20">
+        <div class="bg-white p-8 rounded-3xl shadow-2xl border-4 border-pink-400">
+            <!-- Imagen de Fiesta Total -->
+            <img src="1000162707.png" onerror="this.src='https://media.tenor.com/2N2khj12GqoAAAAC/fiesta-party.gif'" alt="Fiesta Total" class="w-full rounded-xl shadow-lg mb-6 mx-auto transform hover:scale-105 transition-transform duration-300">
+            
+            <p class="text-xl text-gray-700 mb-4">Siuuuu!!!</p>
+            
+            <div class="bg-pink-50 rounded-xl p-4 text-left space-y-2 border border-pink-200">
+                <h3 class="font-bold text-pink-600 uppercase text-sm tracking-wide border-b border-pink-200 pb-1 mb-2">Detalles de la Cita</h3>
+                <p>🗓️ <strong>Fecha:</strong> 14 de Febrero</p>
+                <p>⏰ <strong>Hora:</strong> 20:00 HRS</p>
+                <p>📍 <strong>Lugar:</strong> Metaverso</p>
+            </div>
+            
+            <p class="mt-6 text-sm text-gray-500 italic">Te amo amo ❤️</p>
+        </div>
+    </div>
+
+    <script>
+        // Lógica para cambiar de pantallas
+        function openLetter() {
+            const intro = document.getElementById('intro-screen');
+            const question = document.getElementById('question-screen');
+            
+            // Ocultar intro
+            intro.style.opacity = '0';
+            intro.style.transform = 'scale(0.8)';
+            
+            setTimeout(() => {
+                intro.style.display = 'none';
+                
+                // Mostrar pregunta
+                question.classList.remove('hidden-content');
+                question.classList.add('visible-content');
+                createFloatingHearts(10); // Unos pocos corazones al abrir
+            }, 500);
+        }
+
+        // Lógica del botón escurridizo
+        function moveButton() {
+            const btn = document.getElementById('no-btn');
+            const container = document.getElementById('question-screen');
+            
+            // Obtener dimensiones
+            const containerRect = container.getBoundingClientRect();
+            const btnRect = btn.getBoundingClientRect();
+            
+            // Calcular nueva posición aleatoria dentro del contenedor (con márgenes)
+            // Usamos 'fixed' o 'absolute' dependiendo de la pantalla, pero aquí simplificamos con offsets
+            // Para asegurar que funciona bien en móvil, calculamos maximos movimientos
+            
+            const maxX = containerRect.width - btnRect.width - 20;
+            const maxY = containerRect.height - btnRect.height - 20;
+            
+            const randomX = Math.random() * maxX - (maxX / 2);
+            const randomY = Math.random() * maxY - (maxY / 2);
+
+            // Aplicar transformación
+            btn.style.position = 'absolute';
+            btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+            
+            // Cambiar el texto para hacerlo divertido
+            const frases = ["¿Segura?", "¡Inténtalo otra vez!", "¡No puedes atraparme!", "Ups...", "¡Dale al verde!"];
+            btn.innerText = frases[Math.floor(Math.random() * frases.length)];
+        }
+
+        // Lógica de aceptación
+        function acceptProposal() {
+            const question = document.getElementById('question-screen');
+            const success = document.getElementById('success-screen');
+            
+            question.style.opacity = '0';
+            
+            setTimeout(() => {
+                question.style.display = 'none';
+                success.classList.remove('hidden-content');
+                success.classList.add('visible-content');
+                
+                // Lluvia masiva de corazones
+                setInterval(() => createFloatingHearts(3), 300);
+            }, 500);
+        }
+
+        // Generador de partículas de corazones
+        function createFloatingHearts(count) {
+            const emojis = ['❤️', '💖', '💝', '💕', '🌹'];
+            
+            for (let i = 0; i < count; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('falling-heart');
+                heart.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                
+                // Posición aleatoria horizontal
+                heart.style.left = Math.random() * 100 + 'vw';
+                
+                // Velocidad y tamaño aleatorio
+                const duration = Math.random() * 2 + 3; // entre 3 y 5 segundos
+                const size = Math.random() * 20 + 10; // entre 10px y 30px
+                
+                heart.style.animationDuration = duration + 's';
+                heart.style.fontSize = size + 'px';
+                
+                document.body.appendChild(heart);
+                
+                // Limpiar DOM después de la animación
+                setTimeout(() => {
+                    heart.remove();
+                }, duration * 1000);
+            }
+        }
+    </script>
+</body>
+</html>
